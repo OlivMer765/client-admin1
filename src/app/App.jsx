@@ -1,5 +1,5 @@
 import { AppRoutes } from "./router/AppRoutes";
-import { Toaster, toast } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 /*
   App.jsx: Este es el componente raíz de la aplicación. 

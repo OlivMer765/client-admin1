@@ -18,6 +18,15 @@ const axiosAuth = axios.create({
     },
 });
 
+// Instancia de axios para administración
+const axiosAdmin = axios.create({
+    baseURL: import.meta.env.VITE_ADMIN_URL,
+    timeout: 5000,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
 // Configuración de interceptores para manejar tokens de autenticación
 axiosAuth.interceptors.request.use((config) => {
     config._axiosClient = "auth";
@@ -25,6 +34,17 @@ axiosAuth.interceptors.request.use((config) => {
     const token = useAuthStore.getState().token;
 
     //* Si el token existe, se agrega al encabezado de autorización de la solicitud HTTP. Esto permite que el servidor reconozca al usuario autenticado y le otorgue acceso a los recursos protegidos.
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// Configuración de interceptores para la administración (igual funcionalidad para enviar token)
+axiosAdmin.interceptors.request.use((config) => {
+    config._axiosClient = "admin";
+    const token = useAuthStore.getState().token;
+
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
