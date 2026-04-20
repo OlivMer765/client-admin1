@@ -1,6 +1,12 @@
 import axios from "axios";
 import { useAuthStore } from "../../features/auth/authStore.js";
 
+/*
+    api.js: Este archivo contiene la configuración de las instancias de axios 
+    para autenticación y administración, así como la lógica para manejar la 
+    renovación de tokens de acceso cuando expiran.
+*/
+
 //? Que es axios: Es una biblioteca de JavaScript que permite hacer solicitudes HTTP y gestionar las respuestas de manera sencilla.
 
 // Instancia de axios para autenticación

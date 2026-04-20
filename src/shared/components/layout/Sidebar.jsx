@@ -1,3 +1,8 @@
+
+/*
+  Sidebar.jsx: Este componente representa la barra lateral de navegación del panel de administración.
+*/
+
 export const Sidebar = () => {
   const items = [
     { label: "Canchas" },

@@ -1,3 +1,6 @@
+/*
+    LoginForm.jsx: Este componente representa el formulario de inicio de sesión.
+*/
 export const LoginForm = () => {
     return (
         <form className="space-y-5">

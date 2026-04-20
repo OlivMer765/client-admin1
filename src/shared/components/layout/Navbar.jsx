@@ -1,5 +1,9 @@
 import imgLogo from "../../../assets/img/kinal_sports.png";
 
+
+/*
+  Navbar.jsx: Este componente representa la barra de navegación superior de la aplicación.
+*/
 export const Navbar = () => {
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">

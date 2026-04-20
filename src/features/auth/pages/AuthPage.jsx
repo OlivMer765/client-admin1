@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { LoginForm } from "../components/LoginForm";
 
+/*
+  AuthPage.jsx: Este componente representa la página de autenticación, 
+  que incluye tanto el formulario de inicio de sesión como el de recuperación de contraseña.
+*/
 const AuthPage = () => {
+  //* Estados para controlar qué formulario mostrar
+  // isLogin: controla si se muestra el formulario de inicio de sesión
   const [isLogin, setIsLogin] = useState(true);
+  // isForgot: controla si se muestra el formulario de recuperación de contraseña
   const [isForgot, setIsForgot] = useState(false);
 
   // Función para volver al login desde cualquier estado
@@ -26,6 +33,7 @@ const AuthPage = () => {
         {/* Encabezado Dinámico */}
         <div className="text-center mb-6">
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+            {/* Esta función controla el título dinámico del formulario */}
             {isForgot
               ? "Recuperar Contraseña"
               : isLogin
@@ -34,6 +42,7 @@ const AuthPage = () => {
           </h1>
 
           <p className="text-gray-600 text-base max-w-md mx-auto">
+            {/* Esta función controla el subtítulo dinámico del formulario */}
             {isForgot
               ? "Ingresa tu correo para recuperar tu contraseña"
               : isLogin
@@ -66,6 +75,7 @@ const AuthPage = () => {
 
         {/* Opciones de navegación al final del card */}
         <div className="mt-6 text-center space-y-2">
+          {/* Esta función controla la navegación entre formularios */}
           {isForgot ? (
             <button
               onClick={handleBackToLogin}
@@ -85,6 +95,7 @@ const AuthPage = () => {
               )}
 
               <p className="text-sm text-gray-600">
+                {/* Esta función controla el mensaje de navegación entre formularios */}
                 {isLogin ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
                 <button
                   onClick={() => setIsLogin(!isLogin)}

@@ -1,3 +1,6 @@
+/*
+  ForgotPasswordForm.jsx: Este componente representa el formulario de recuperación de contraseña.
+*/
 export const ForgotPasswordForm = ({ onSwitch }) => {
   return (
     <form className="space-y-5">
