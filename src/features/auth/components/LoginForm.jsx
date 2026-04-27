@@ -25,6 +25,8 @@ export const LoginForm = () => {
         if (res.success) {
             navigate("/dashboard");
             toast.success("¡Inicio de sesión exitoso!");
+        } else {
+            toast.error(res.error);
         }
     };
 
