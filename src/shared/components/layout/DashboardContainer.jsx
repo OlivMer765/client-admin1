@@ -1,5 +1,7 @@
+import { Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
+
 
 /* 
     DashboardContainer.jsx: Este componente es el contenedor principal para el panel de administración.
@@ -33,7 +35,7 @@ export const DashboardContainer = () => {
                         que se pasará como children al componente DashboardContainer.
                         Contenido del menú
                     */}
-
+                    <Outlet />
                 </main>
             </div>
         </div>
