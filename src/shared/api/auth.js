@@ -28,11 +28,10 @@ export const verifyEmail = async (token) => {
 };
 
 export const updateUserRole = async (userId, roleName) => {
-    return await axiosAuth.post(`/api/v1/users/${userId}/role`, { roleName});
+    return await axiosAuth.post(`/users/${userId}/role`, { roleName});
 };
 
 export const getAllUsers = async () => {
     const { data } = await axiosAuth.get("/api/v1/auth/users");
     return {user: data};
-    
 };
