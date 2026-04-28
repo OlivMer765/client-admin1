@@ -1,28 +1,13 @@
-export const TeamModal = () => {
+import { Modal } from "../../../../shared/ui/Modal";
+
+export const TeamModal = ({ isOpen, onClose }) => {
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 px-3 sm:px-4">
-            {/* CONTENEDOR */}
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg md:max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
-
-                {/* HEADER */}
-                <div
-                    className="p-4 sm:p-5 text-white sticky top-0 z-10"
-                    style={{
-                        background:
-                            "linear-gradient(90deg, var(--main-blue) 0%, #1956a3 100%)",
-                    }}
-                >
-                    <h2 className="text-xl sm:text-2xl font-bold">
-                        Nuevo Equipo
-                    </h2>
-                    <p className="text-xs sm:text-sm opacity-80">
-                        Completa la información del equipo
-                    </p>
-                </div>
-
-                {/* FORM */}
-                <div className="p-4 sm:p-6 space-y-5 overflow-y-auto">
-
+        <Modal 
+            isOpen={isOpen} 
+            onClose={onClose} 
+            title="Nuevo Equipo" 
+            subtitle="Completa la información del equipo"
+        >
                     {/* PREVIEW */}
                     <div className="flex justify-center">
                         <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl bg-gray-100 border flex items-center justify-center overflow-hidden shadow-inner">
@@ -100,6 +85,7 @@ export const TeamModal = () => {
                     {/* BOTONES */}
                     <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t">
                         <button
+                            onClick={onClose}
                             className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
                         >
                             Cancelar
@@ -116,8 +102,6 @@ export const TeamModal = () => {
                             Crear equipo
                         </button>
                     </div>
-                </div>
-            </div>
-        </div>
+        </Modal>
     );
 };

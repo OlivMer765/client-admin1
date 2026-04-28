@@ -1,7 +1,9 @@
 import { Spinner } from "../../../../features/auth/components/Spinner.jsx";
 import { TeamModal } from "./TeamModal.jsx";
+import { useModal } from "../../../../shared/ui/hooks/useModal.js";
 
 export const Teams = () => {
+    const { isOpen, openModal, closeModal } = useModal();
     const loading = false;
 
     if (loading) return <Spinner />;
@@ -19,7 +21,10 @@ export const Teams = () => {
                     </p>
                 </div>
 
-                <button className="bg-main-blue px-4 py-2 rounded text-white hover:opacity-90">
+                <button 
+                    onClick={openModal}
+                    className="bg-main-blue px-4 py-2 rounded text-white hover:opacity-90"
+                >
                     + Agregar Equipo
                 </button>
             </div>
@@ -62,7 +67,7 @@ export const Teams = () => {
 
                         {/* BOTONES */}
                         <div className="flex gap-3 mt-5">
-                            <button className="flex-1 py-2 rounded-lg bg-main-blue text-white font-medium hover:opacity-90 transition">
+                            <button className="flex-1 py-2 rounded-lg bg-main-blue text-white font-medium hover:opacity-90 transition" onClick={openModal}>
                                 ✏️ Editar
                             </button>
 
@@ -96,7 +101,7 @@ export const Teams = () => {
                         </p>
 
                         <div className="flex gap-3 mt-5">
-                            <button className="flex-1 py-2 rounded-lg bg-main-blue text-white font-medium">
+                            <button className="flex-1 py-2 rounded-lg bg-main-blue text-white font-medium" onClick={openModal}>
                                 ✏️ Editar
                             </button>
 
@@ -109,8 +114,8 @@ export const Teams = () => {
 
             </div>
 
-            {/* MODAL (siempre visible en UI pura) */}
-            <TeamModal />
+            {/* MODAL */}
+            <TeamModal isOpen={isOpen} onClose={closeModal} />
         </div>
     );
 };

@@ -1,3 +1,8 @@
+/*
+* Settings.jsx: Componente para la gestión de usuarios. 
+* Muestra una tabla con los usuarios registrados, su email, 
+* rol y una acción para cambiar su rol. En móvil se muestra como tarjetas.
+*/
 export const Settings = ({ users = [] }) => {
     return (
         <div className="p-4 md:p-6">

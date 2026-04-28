@@ -10,10 +10,10 @@ export const UserComboBox = ({ value, error, disabled, users = [] }) => {
             {/* INPUT */}
             <div
                 className={`flex items-center w-full px-3 py-2 rounded-lg border-2 shadow-sm transition
-          ${disabled
-                        ? "bg-gray-200 border-gray-200 text-gray-500"
-                        : "border-[var(--main-blue)] bg-gray-50"}
-          ${error ? "border-red-500" : ""}
+            ${disabled
+                    ? "bg-gray-200 border-gray-200 text-gray-500"
+                    : "border-[var(--main-blue)] bg-gray-50"}
+            ${error ? "border-red-500" : ""}
         `}
             >
                 <div className="flex-1 truncate">
