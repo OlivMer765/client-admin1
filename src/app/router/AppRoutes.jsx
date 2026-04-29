@@ -1,11 +1,11 @@
 import {Route, Routes} from "react-router-dom";
 import { AuthPage } from "../../features/auth/pages/AuthPage";
 import { DashboardPage } from "../layouts/DashboardPage";
-import { Fields } from "../../features/userClient/fields/components/Fields";
-import { Reservations } from "../../features/userClient/reservations/components/Reservations";
-import { Teams } from "../../features/userClient/teams/components/Teams";
-import { Tournaments } from "../../features/userClient/tournaments/components/Tournaments";
-import { Users } from "../../features/userClient/users/Users";
+import { Fields } from "../../features/fields/components/Fields";
+import { Reservations } from "../../features/reservations/components/Reservations";
+import { Teams } from "../../features/teams/components/Teams";
+import { Tournaments } from "../../features/tournaments/components/Tournaments";
+import { Users } from "../../features/users/components/Users";
 
 export const AppRoutes = ()=> {
 
