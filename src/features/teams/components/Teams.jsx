@@ -1,6 +1,6 @@
-import { Spinner } from "../../../../features/auth/components/Spinner.jsx";
+import { Spinner } from "../../auth/components/Spinner.jsx";
 import { TeamModal } from "./TeamModal.jsx";
-import { useModal } from "../../../../shared/ui/hooks/useModal.js";
+import { useModal } from "../../../shared/ui/hooks/useModal.js";
 
 export const Teams = () => {
     const { isOpen, openModal, closeModal } = useModal();

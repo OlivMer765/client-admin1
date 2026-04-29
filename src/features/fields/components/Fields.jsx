@@ -1,6 +1,6 @@
-import { Spinner } from "../../../auth/components/Spinner";
+import { Spinner } from "../../auth/components/Spinner";
 import { FieldModal } from "./FieldModal";
-import { useModal } from "../../../../shared/ui/hooks/useModal";
+import { useModal } from "../../../shared/ui/hooks/useModal";
 
 export const Fields = () => {
     const { isOpen, openModal, closeModal } = useModal();

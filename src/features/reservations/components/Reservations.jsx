@@ -1,4 +1,4 @@
-import { Spinner } from "../../../auth/components/Spinner.jsx";
+import { Spinner } from "../../auth/components/Spinner.jsx";
 
 export const Reservations = () => {
     const loading = false;

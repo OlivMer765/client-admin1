@@ -1,6 +1,6 @@
-import { Spinner } from "../../../auth/components/Spinner.jsx";
+import { Spinner } from "../../auth/components/Spinner.jsx";
 import { TournamentModal } from "./TournamentModal.jsx";
-import { useModal } from "../../../../shared/ui/hooks/useModal.js";
+import { useModal } from "../../../shared/ui/hooks/useModal.js";
 
 export const Tournaments = () => {
     const { isOpen, openModal, closeModal } = useModal();

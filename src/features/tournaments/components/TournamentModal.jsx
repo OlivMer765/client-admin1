@@ -1,4 +1,4 @@
-import { Modal } from "../../../../shared/ui/Modal.jsx";
+import { Modal } from "../../../shared/ui/Modal.jsx";
 
 export const TournamentModal = ({ isOpen, onClose }) => {
     return (
