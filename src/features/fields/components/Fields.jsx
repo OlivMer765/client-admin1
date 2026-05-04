@@ -1,12 +1,12 @@
-import { Spinner } from "../../auth/components/Spinner.jsx";
-import { FieldModal } from "./FieldModal";
-import { useModal } from "../../../shared/ui/Modal.jsx";
+import {Spinner} from "../../auth/components/Spinner.jsx";
+import {FieldModal} from "./FieldModal";
+import {useModal} from "../../../shared/ui/hooks/useModal.js";
 
 export const Fields = () => {
-    const { isOpen, openModal, closeModal } = useModal();
+    const {isOpen, openModal, closeModal} = useModal();
     const loading = false;
 
-    if (loading) return <Spinner />;
+    if (loading) return <Spinner/>;
 
     return (
         <div className="p-4">
@@ -33,7 +33,8 @@ export const Fields = () => {
             <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
                 {/* CARD */}
-                <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:scale-[1.02]">
+                <div
+                    className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:scale-[1.02]">
 
                     {/* IMAGEN */}
                     <div className="w-full h-52 bg-gray-100 flex items-center justify-center">
@@ -68,11 +69,14 @@ export const Fields = () => {
 
                         {/* BOTONES */}
                         <div className="flex gap-3 mt-5">
-                            <button className="flex-1 py-2 rounded-lg bg-main-blue text-white font-medium hover:opacity-90 transition" onClick={openModal}>
+                            <button
+                                className="flex-1 py-2 rounded-lg bg-main-blue text-white font-medium hover:opacity-90 transition"
+                                onClick={openModal}>
                                 ✏️ Editar
                             </button>
 
-                            <button className="flex-1 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition">
+                            <button
+                                className="flex-1 py-2 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition">
                                 🗑️ Eliminar
                             </button>
                         </div>
@@ -80,7 +84,7 @@ export const Fields = () => {
                 </div>
 
             </div>
-            <FieldModal isOpen={isOpen} onClose={closeModal} />
+            <FieldModal isOpen={isOpen} onClose={closeModal}/>
         </div>
     );
 };

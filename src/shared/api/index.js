@@ -5,5 +5,5 @@
 
 export * from './auth';
 export * from './admin';
-export {axiosAuth, axiosAdmin, handleRefreshToken} from './axios';
+export {axiosAuth, axiosAdmin, handleRefreshToken} from '../../shared/api/api.js';
 export * from './api.js';
