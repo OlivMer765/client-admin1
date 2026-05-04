@@ -1,52 +1,97 @@
 import {Modal} from "../../../shared/ui/Modal";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useForm} from "react-hook-form";
 import {useSavedField} from "../hooks/useSavedField";
 
-export const FieldModal = ({isOpen, onClose}) => {
+import {showSuccess, showError, showInfo} from "../../../shared/utils/toast.js";
+import { Spinner } from "../../../features/auth/components/Spinner.jsx";
+
+export const FieldModal = ({isOpen, onClose, field}) => {
+    
     const {saveField} = useSavedField();
-    const [formData, setFormData] = useState({
-        fieldName: "",
-        fieldType: "",
-        capacity: "",
-        pricePerHour: "",
-        description: "",
-        photo: null
-    });
+    const [preview, setPreview] = useState(null);
 
-    const handleChange = (e) => {
-        const {name, value, files} = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: files ? files : value
-        }));
+    const {
+        register,
+        handleSubmit,
+        reset,
+        watch,
+        formState: { errors },
+    } = useForm();
+
+    useEffect(() => {
+        if(isOpen){
+            if(field){
+                reset({
+                    fieldName: field.name,
+                    fieldType: field.type,
+                    capacity: field.capacity,
+                    pricePerHour: field.pricePerHour || field.price,
+                    description: field.description,
+                });
+                setPreview(field.imageUrl);
+            } else {
+                reset({
+                    fieldName: "",
+                    fieldType: "",
+                    capacity: "",
+                    pricePerHour: "",
+                    description: "",
+                });
+                setPreview(null);
+            }
+        }
+    }, [isOpen, field, reset]);
+
+    useEffect(() => {
+        const subscription = watch((value, { name }) => {
+            if (name === "photo" && value.photo && value.photo.length > 0) {
+                setPreview(URL.createObjectURL(value.photo[0]));
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [watch]);
+
+    const onSubmit = async (data) => {
+        try {
+            await saveField(data, field?._id || field?.id);
+            showSuccess(
+                field ? "Campo actualizado exitosamente." : "Campo creado exitosamente."
+            );
+            reset();
+            setPreview(null);
+            onClose();
+        } catch (error) {
+            showError(error.message || "Error al guardar el campo.");
+        }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        await saveField(formData);
-        onClose();
-    };
-
+    if (!isOpen) return null;
+    
     return (
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            title="Nuevo Campo"
-            subtitle="Completa la informacin del campo"
+            title={field ? "Editar Campo" : "Nuevo Campo"}
+            subtitle="Completa la información del campo"
         >
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 {/* PREVIEW */}
                 <div className="flex justify-center">
                     <div
-                        className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl bg-gray-100 border flex items-center justify-center overflow-hidden shadow-inner">
+                        className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl bg-gray-100 border flex items-center justify-center overflow-hidden shadow-inner flex-col gap-1">
+                        {preview ? (
+                            <img src={preview} alt="Vista previa" className="object-cover w-full h-full" />
+                        ) : (
                             <span className="text-gray-400 text-xs sm:text-sm">
                                 Sin imagen
                             </span>
+                        )}
                     </div>
                 </div>
 
                 {/* INPUTS */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
 
                     {/* Nombre */}
                     <div className="flex flex-col md:col-span-2">
@@ -54,15 +99,23 @@ export const FieldModal = ({isOpen, onClose}) => {
                             Nombre del campo
                         </label>
                         <input
-                            name="fieldName"
-                            value={formData.fieldName}
-                            onChange={handleChange}
-                            required
                             maxLength={100}
                             className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm 
                 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                             placeholder="Ej. Cancha Central"
+                            {...register("fieldName", {
+                                required: "El nombre es obligatorio",
+                                minLength: {
+                                    value: 3,
+                                    message: "Debe tener al menos 3 caracteres"
+                                },
+                            })}
                         />
+                        {errors.fieldName && (
+                            <p className="text-red-600 text-xs mt-1">
+                                {errors.fieldName.message}
+                            </p>
+                        )}
                     </div>
 
                     {/* Tipo */}
@@ -72,9 +125,9 @@ export const FieldModal = ({isOpen, onClose}) => {
                         </label>
                         <select
                             name="fieldType"
-                            value={formData.fieldType}
-                            onChange={handleChange}
-                            required
+                            {...register("fieldType", {
+                                required: "El tipo es obligatorio",
+                            })}
                             className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm 
                 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                         >
@@ -84,6 +137,11 @@ export const FieldModal = ({isOpen, onClose}) => {
                             <option value="CONCRETO">Concreto</option>
                             <option value="ARENA">Arena</option>
                         </select>
+                        {errors.fieldType && (
+                            <p className="text-red-600 text-xs mt-1">
+                                {errors.fieldType.message}
+                            </p>
+                        )}
                     </div>
 
                     {/* Capacidad */}
@@ -93,9 +151,10 @@ export const FieldModal = ({isOpen, onClose}) => {
                         </label>
                         <select
                             name="capacity"
-                            value={formData.capacity}
-                            onChange={handleChange}
-                            required
+                            {...register("capacity",{
+                                required: "La capacidad es obligatoria",
+                                }
+                            )}
                             className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm 
                 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                         >
@@ -104,6 +163,11 @@ export const FieldModal = ({isOpen, onClose}) => {
                             <option value="FUTBOL_7">Fútbol 7</option>
                             <option value="FUTBOL_11">Fútbol 11</option>
                         </select>
+                        {errors.capacity && (
+                            <p className="text-red-600 text-xs mt-1">
+                                {errors.capacity.message}
+                            </p>
+                        )}
                     </div>
 
                     {/* Precio */}
@@ -112,31 +176,33 @@ export const FieldModal = ({isOpen, onClose}) => {
                             Precio por hora
                         </label>
                         <input
-                            name="pricePerHour"
-                            value={formData.pricePerHour}
-                            onChange={handleChange}
-                            required
                             min="0"
                             type="number"
                             className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm 
                 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                             placeholder="Q100"
+                            {...register("pricePerHour", {
+                                required: "El precio es obligatorio"
+                            })}
                         />
+                        {errors.pricePerHour && (
+                            <p className="text-red-600 text-xs mt-1">
+                                {errors.pricePerHour.message}
+                            </p>
+                        )}
                     </div>
 
                     {/* Descripcin */}
                     <div className="flex flex-col md:col-span-2">
                         <label className="text-sm font-semibold text-gray-700 mb-1">
-                            Descripcin
+                            Descripción
                         </label>
                         <textarea
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
                             maxLength={500}
                             className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm 
                 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                             placeholder="Detalles del campo..."
+                            {...register("description")}
                         />
                     </div>
 
@@ -147,11 +213,11 @@ export const FieldModal = ({isOpen, onClose}) => {
                         </label>
                         <input
                             name="photo"
-                            onChange={handleChange}
                             type="file"
                             className="w-full px-3 py-2 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 
                 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 transition cursor-pointer"
                             accept="image/*"
+                            {...register("photo")}
                         />
                     </div>
                 </div>
@@ -160,7 +226,10 @@ export const FieldModal = ({isOpen, onClose}) => {
                 <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t">
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={()=>{
+                            reset();
+                            onClose();
+                        }}
                         className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
                     >
                         Cancelar
@@ -175,7 +244,7 @@ export const FieldModal = ({isOpen, onClose}) => {
                             border: "none",
                         }}
                     >
-                        Crear campo
+                        Guardar campo
                     </button>
                 </div>
             </form>
