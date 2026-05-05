@@ -2,11 +2,11 @@ import {useFieldsStore} from "../../users/store/adminStore";
 
 export const useSavedField = () => {
 
-    // Recuperacin de funciones para el hook
+    // Recuperacion de funciones para el hook
     const createField = useFieldsStore((state) => state.createField);
     const updateField = useFieldsStore((state) => state.updateField);
 
-    // Funcin para guardar un campo (crear o actualizar)
+    // Funcion para guardar un campo (crear o actualizar)
     const saveField = async (data, fieldId = null) => {
         const formData = new FormData();
 

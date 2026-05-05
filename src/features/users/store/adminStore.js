@@ -2,8 +2,8 @@ import { create } from "zustand";
 import {
     getFields as getFieldsRequest,
     createField as createFieldRequest,
-    updateField as _updateFieldRequest,
-    deleteField as _deleteFieldRequest,
+    updateField as updateFieldRequest,
+    deleteField as deleteFieldRequest,
     getAllReservations as getAllReservationsRequest,
     confirmReservation as confirmReservationRequest,
 } from "../../../shared/api";
@@ -53,9 +53,49 @@ export const useFieldsStore = create((set, get) => ({
                 loading: false,
                 error: error.response?.data?.message || "Error al crear campo",
             });
+            throw error;
         }
     },
-    // ...rest of logic
+
+    updateField: async (id, formData) => {
+        try {
+            set({loading: true, error: null});
+
+            const response = await updateFieldRequest(id, formData);
+
+            set({
+                fields: get().fields.map((f) =>
+                    (f.id === id || f._id === id) ? response.data.data : f
+                ),
+                loading: false,
+            });
+        } catch (error) {
+            set({
+                loading: false,
+                error: error.response?.data?.message || "Error al actualizar campo",
+            });
+            throw error;
+        }
+    },
+
+    deleteField: async (id) => {
+        try {
+            set({loading: true, error: null});
+
+            await deleteFieldRequest(id);
+
+            set({
+                fields: get().fields.filter((f) => f.id !== id && f._id !== id),
+                loading: false,
+            });
+        } catch (error) {
+            set({
+                loading: false,
+                error: error.response?.data?.message || "Error al eliminar campo",
+            });
+            throw error;
+        }
+    },
 
     getAllReservations: async () => {
         try {
