@@ -12,7 +12,6 @@ const baseSytle = {
 export const showSuccess = (message) =>
     toast.success(message, {
         style: {
-            ...baseStyle,
             background: "linear-gradient(90deg, #22c55e 0%, #16a34a 100%)",
             color: "#fff",
             border: "2px solid #22c55e",
@@ -26,7 +25,6 @@ export const showSuccess = (message) =>
 export const showError = (message) =>
     toast.error(message, {
         style: {
-            ...baseStyle,
             background: "linear-gradient(90deg, #ef4444 0%, #b91c1c 100%)",
             color: "#fff",
             border: "2px solid #ef4444",
@@ -40,7 +38,6 @@ export const showError = (message) =>
 export const showInfo = (message) =>
     toast(message, {
         style: {
-            ...baseStyle,
             background: "linear-gradient(90deg, #0ea5e9 0%, #0369a1 100%)",
             color: "#fff",
             border: "2px solid #0ea5e9",
