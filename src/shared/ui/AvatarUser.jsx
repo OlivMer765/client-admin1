@@ -51,6 +51,7 @@ export const AvatarUser = () => {
                 onClick={toggleMenu}
                 src={avatarSrc}
                 alt={user?.username}
+                crossOrigin="anonymous"
                 className="w-10 h-10 rounded-full object-cover border cursor-pointer"
                 onError={(e) => {
                     e.target.onerror = null;

@@ -2,8 +2,7 @@ import {Modal} from "../../../shared/ui/Modal";
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useSavedField} from "../hooks/useSavedField";
-
-import {showSuccess, showError, showInfo} from "../../../shared/utils/toast.js";
+import {showSuccess, showError} from "../../../shared/utils/toast.js";
 import { Spinner } from "../../../features/auth/components/Spinner.jsx";
 
 export const FieldModal = ({isOpen, onClose, field}) => {
@@ -23,13 +22,15 @@ export const FieldModal = ({isOpen, onClose, field}) => {
         if(isOpen){
             if(field){
                 reset({
-                    fieldName: field.name,
-                    fieldType: field.type,
+                    fieldName: field.fieldName,
+                    fieldType: field.fieldType,
                     capacity: field.capacity,
-                    pricePerHour: field.pricePerHour || field.price,
+                    pricePerHour: field.pricePerHour,
                     description: field.description,
                 });
-                setPreview(field.imageUrl);
+                setPreview(
+                    `https://res.cloudinary.com/dueikakf8/image/upload/v1777916432/kinalSports/${field.photo}`
+                );
             } else {
                 reset({
                     fieldName: "",
@@ -37,6 +38,7 @@ export const FieldModal = ({isOpen, onClose, field}) => {
                     capacity: "",
                     pricePerHour: "",
                     description: "",
+                    photo: null,
                 });
                 setPreview(null);
             }
@@ -56,7 +58,9 @@ export const FieldModal = ({isOpen, onClose, field}) => {
         try {
             await saveField(data, field?._id || field?.id);
             showSuccess(
-                field ? "Campo actualizado exitosamente." : "Campo creado exitosamente."
+                field
+                    ? "Campo actualizado exitosamente."
+                    : "Campo creado exitosamente."
             );
             reset();
             setPreview(null);
@@ -75,13 +79,16 @@ export const FieldModal = ({isOpen, onClose, field}) => {
             title={field ? "Editar Campo" : "Nuevo Campo"}
             subtitle="Completa la información del campo"
         >
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="p-4 sm:p-6 space-y-5 overflow-y-auto"
+            >
                 {/* PREVIEW */}
                 <div className="flex justify-center">
                     <div
-                        className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl bg-gray-100 border flex items-center justify-center overflow-hidden shadow-inner flex-col gap-1">
+                        className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl bg-gray-100 border flex items-center justify-center overflow-hidden shadow-inner">
                         {preview ? (
-                            <img src={preview} alt="Vista previa" className="object-cover w-full h-full" />
+                            <img src={preview} className="w-full h-full object-cover"/>
                         ) : (
                             <span className="text-gray-400 text-xs sm:text-sm">
                                 Sin imagen
@@ -182,7 +189,8 @@ export const FieldModal = ({isOpen, onClose, field}) => {
                 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                             placeholder="Q100"
                             {...register("pricePerHour", {
-                                required: "El precio es obligatorio"
+                                required: "El precio es obligatorio",
+                                min: {value: 1, message: "Debe ser mayor a 0"},
                             })}
                         />
                         {errors.pricePerHour && (
@@ -202,8 +210,15 @@ export const FieldModal = ({isOpen, onClose, field}) => {
                             className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 bg-gray-50 shadow-sm 
                 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
                             placeholder="Detalles del campo..."
-                            {...register("description")}
+                            {...register("description", {
+                                required: "La descripción es obligatoria",
+                            })}
                         />
+                        {errors.description && (
+                            <p className="text-red-600 text-xs mt-1">
+                                {errors.description.message}
+                            </p>
+                        )}
                     </div>
 
                     {/* Imagen */}
@@ -228,6 +243,7 @@ export const FieldModal = ({isOpen, onClose, field}) => {
                         type="button"
                         onClick={()=>{
                             reset();
+                            setPreview(null);
                             onClose();
                         }}
                         className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
